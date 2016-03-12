@@ -3,13 +3,15 @@ module Rory.Server.Name
     , serverName
     ) where
 
-import qualified Data.ByteString.Char8 as S8
-import Data.List (intercalate)
-import Network.HTTP.Types (Header)
-import Network.HTTP.Types.Header (hServer)
-import Network.Wai (Middleware, modifyResponse, mapResponseHeaders)
-import Network.Wai.Handler.Warp (warpVersion)
 import Rory.Core (roryVersion)
+
+import qualified Data.ByteString.Char8 as S8
+
+import Network.HTTP.Types        (Header)
+import Network.HTTP.Types.Header (hServer)
+import Network.Wai               (Middleware, mapResponseHeaders,
+                                  modifyResponse)
+import Network.Wai.Handler.Warp  (warpVersion)
 
 middleware :: Middleware
 middleware = modifyResponse (mapResponseHeaders (serverHeader :))

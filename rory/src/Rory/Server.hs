@@ -4,18 +4,18 @@ module Rory.Server
     ( main
     ) where
 
-import qualified Network.Wai as Wai
-import Network.Wai.Handler.Warp (run)
-import qualified Network.Wai.Parse as NWP
-import Network.HTTP.Types (status200)
-import System.Directory (renameFile)
-import qualified Control.Monad.Trans.Resource as Res
-import Control.Monad.Trans.Resource
-import qualified Data.ByteString.Char8 as S8
-import qualified Data.ByteString as BS
-import qualified Blaze.ByteString.Builder.ByteString as BBS
-
 import qualified Rory.Server.Name
+
+import qualified Blaze.ByteString.Builder.ByteString as BBS
+import           Control.Monad.Trans.Resource
+import qualified Control.Monad.Trans.Resource        as Res
+import qualified Data.ByteString                     as BS
+import qualified Data.ByteString.Char8               as S8
+import           Network.HTTP.Types                  (status200)
+import qualified Network.Wai                         as Wai
+import           Network.Wai.Handler.Warp            (run)
+import qualified Network.Wai.Parse                   as NWP
+import           System.Directory                    (renameFile)
 
 application :: Wai.Application
 application request respond = do
