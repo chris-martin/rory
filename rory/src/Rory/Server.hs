@@ -4,6 +4,7 @@ module Rory.Server
     ( main
     ) where
 
+import           Rory.Server.Args (Args)
 import qualified Rory.Server.Args
 import qualified Rory.Server.Name
 
@@ -19,13 +20,17 @@ import qualified Network.Wai.Parse                   as NWP
 import           System.Directory                    (renameFile)
 import qualified System.Posix.Signals                as Sig
 
-application :: Wai.Application
-application request respond = do
+data Server = Server
+    { serverArgs :: Args
+    }
+
+application :: Server -> Wai.Application
+application server request respond = do
   _ <- runResourceT $ Res.withInternalState $ \is -> do
     (_params, files) <- NWP.parseRequestBody (tempFileBackEnd is) request
     _ <- renameFile (NWP.fileContent $ snd $ head files) "/tmp/upload"
     return ()
-  received <- respond (stringResponse Rory.Server.Name.serverName)
+  received <- respond $ stringResponse $ show $ serverArgs server
   return received
 
 tempFileBackEnd :: Res.InternalState -> ignored1 -> ignored2 -> IO BS.ByteString -> IO FilePath
@@ -37,9 +42,12 @@ stringResponse body = Wai.responseBuilder
    [("Content-Type", "text/plain")]
    (BBS.fromByteString $ S8.pack body)
 
+initServer :: Args -> Server
+initServer args = Server { serverArgs = args }
+
 main :: IO ()
 main = do args <- Rory.Server.Args.get
           _    <- Sig.installHandler Sig.sigHUP Sig.Ignore Nothing
-          _    <- run 3000 $ middleware application
+          _    <- run 3000 $ middleware $ application $ initServer args
           return ()
   where middleware = Rory.Server.Name.middleware

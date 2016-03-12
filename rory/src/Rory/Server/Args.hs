@@ -15,7 +15,7 @@ parserInfo = info (helper <*> parser) fullDesc
 
 data Args = Args
     { configFile :: Maybe FilePath
-    }
+    } deriving Show
 
 parser :: Parser Args
 parser = Args
