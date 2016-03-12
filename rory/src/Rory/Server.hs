@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Rory.Server (run) where
 
 import           Rory.Args        (Args)
@@ -15,7 +13,7 @@ import qualified Data.ByteString.Char8               as S8
 import           Data.IORef                          (IORef, newIORef,
                                                       readIORef, writeIORef)
 import qualified Data.Text                           as Text
-import           Network.HTTP.Types                  (status200)
+import           Network.HTTP.Types                  (hContentType, status200)
 import qualified Network.Wai                         as Wai
 import qualified Network.Wai.Handler.Warp            as Warp
 import qualified Network.Wai.Parse                   as NWP
@@ -74,5 +72,5 @@ tempFileBackEnd = NWP.tempFileBackEndOpts (pure "/tmp") "webenc.buf"
 stringResponse :: String -> Wai.Response
 stringResponse body = Wai.responseBuilder
     status200
-    [("Content-Type", "text/plain")]
+    [(hContentType, S8.pack "text/plain")]
     (BBS.fromByteString $ S8.pack body)
