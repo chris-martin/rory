@@ -16,6 +16,7 @@ import qualified Network.Wai                         as Wai
 import           Network.Wai.Handler.Warp            (run)
 import qualified Network.Wai.Parse                   as NWP
 import           System.Directory                    (renameFile)
+import qualified System.Posix.Signals                as Sig
 
 application :: Wai.Application
 application request respond = do
@@ -36,5 +37,6 @@ stringResponse body = Wai.responseBuilder
    (BBS.fromByteString $ S8.pack body)
 
 main :: IO ()
-main = run 3000 $ middleware application
+main = do Sig.installHandler Sig.sigHUP Sig.Ignore Nothing
+          run 3000 $ middleware application
   where middleware = Rory.Server.Name.middleware
