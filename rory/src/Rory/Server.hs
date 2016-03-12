@@ -4,6 +4,7 @@ module Rory.Server
     ( main
     ) where
 
+import qualified Rory.Server.Args
 import qualified Rory.Server.Name
 
 import qualified Blaze.ByteString.Builder.ByteString as BBS
@@ -37,6 +38,8 @@ stringResponse body = Wai.responseBuilder
    (BBS.fromByteString $ S8.pack body)
 
 main :: IO ()
-main = do Sig.installHandler Sig.sigHUP Sig.Ignore Nothing
-          run 3000 $ middleware application
+main = do args <- Rory.Server.Args.get
+          _    <- Sig.installHandler Sig.sigHUP Sig.Ignore Nothing
+          _    <- run 3000 $ middleware application
+          return ()
   where middleware = Rory.Server.Name.middleware

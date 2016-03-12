@@ -11,6 +11,7 @@ library
   exposed-modules:     Rory.Core
                      , Rory.Ctl
                      , Rory.Server
+                     , Rory.Server.Args
                      , Rory.Server.Name
                      , Paths_rory
   build-depends:       base >= 4.7 && < 5
@@ -18,6 +19,7 @@ library
                      , bytestring
                      , directory
                      , http-types
+                     , optparse-applicative
                      , resourcet
                      , unix
                      , wai
