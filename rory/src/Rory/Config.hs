@@ -4,6 +4,8 @@ import           Rory.Args (Args)
 import qualified Rory.Args as Args
 
 import qualified Data.ByteString as BS
+import qualified Data.Text       as Text
+import qualified Systemd.Journal as J
 
 data Config = Config
     { fileContent :: Maybe BS.ByteString
@@ -19,4 +21,7 @@ load :: Args -> IO Config
 load args = maybe (return empty) loadFile $ Args.configFile args
 
 loadFile :: FilePath -> IO Config
-loadFile path = fromFileContent <$> BS.readFile path
+loadFile path = do
+    J.sendMessage $ Text.pack $ "Reading config from " ++ path
+    content <- BS.readFile path
+    return $ fromFileContent content

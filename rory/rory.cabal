@@ -20,8 +20,10 @@ library
                      , bytestring
                      , directory
                      , http-types
+                     , libsystemd-journal
                      , optparse-applicative
                      , resourcet
+                     , text
                      , unix
                      , wai
                      , wai-extra

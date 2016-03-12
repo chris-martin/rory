@@ -3,7 +3,6 @@
 module Rory.Server (run) where
 
 import           Rory.Args        (Args)
-import qualified Rory.Args        as Args
 import           Rory.Config      (Config)
 import qualified Rory.Config      as Config
 import qualified Rory.Server.Name
@@ -15,12 +14,14 @@ import qualified Data.ByteString                     as BS
 import qualified Data.ByteString.Char8               as S8
 import           Data.IORef                          (IORef, newIORef,
                                                       readIORef, writeIORef)
+import qualified Data.Text                           as Text
 import           Network.HTTP.Types                  (status200)
 import qualified Network.Wai                         as Wai
 import qualified Network.Wai.Handler.Warp            as Warp
 import qualified Network.Wai.Parse                   as NWP
 import           System.Directory                    (renameFile)
 import qualified System.Posix.Signals                as Sig
+import qualified Systemd.Journal                     as J
 
 run :: Args -> IO ()
 run args = do
@@ -37,7 +38,7 @@ installHupHandler server = do
     return ()
   where
     handler = Sig.Catch $ do
-        putStrLn "Received HUP signal; reloading config"
+        J.sendMessage $ Text.pack "Received HUP signal"
         loadConfig server
 
 data Server = Server
