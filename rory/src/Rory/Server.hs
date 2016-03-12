@@ -1,9 +1,9 @@
 module Rory.Server (run) where
 
-import           Rory.Args        (Args)
-import           Rory.Config      (Config)
-import qualified Rory.Config      as Config
-import qualified Rory.Server.Name
+import           Rory.Args    (Args)
+import           Rory.Config  (Config)
+import qualified Rory.Config  as Config
+import qualified Rory.Version
 
 import qualified Blaze.ByteString.Builder.ByteString as BBS
 import           Control.Monad.Trans.Resource
@@ -25,9 +25,10 @@ run :: Args -> IO ()
 run args = do
     server <- initServer args
     _ <- installHupHandler server
-    Warp.run 3000 $ middleware $ application server
+    Warp.runSettings settings $ application server
   where
-    middleware = Rory.Server.Name.middleware
+    settings = (Warp.setServerName $ S8.pack Rory.Version.serverName)
+        Warp.defaultSettings
 
 -- | Set up the HUP signal handler to reload the config.
 installHupHandler :: Server -> IO ()
