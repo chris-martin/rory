@@ -11,9 +11,7 @@ get :: IO Args
 get = execParser parserInfo
 
 parserInfo :: ParserInfo Args
-parserInfo = info (helper <*> parser)
-    ( fullDesc
-   <> header "rory-server - Starts the Rory server" )
+parserInfo = info (helper <*> parser) fullDesc
 
 data Args = Args
     { configFile :: Maybe FilePath
