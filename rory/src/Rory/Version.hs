@@ -1,6 +1,4 @@
-module Rory.Core
-    ( roryVersion
-    ) where
+module Rory.Version (roryVersion) where
 
 import Data.Version (showVersion)
 

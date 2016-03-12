@@ -1,1 +1,1 @@
-module Main (main) where import Rory.Server
+module Main (main) where import Rory.App

@@ -3,7 +3,7 @@ module Rory.Server.Name
     , serverName
     ) where
 
-import Rory.Core (roryVersion)
+import Rory.Version (roryVersion)
 
 import qualified Data.ByteString.Char8 as S8
 
@@ -14,7 +14,7 @@ import Network.Wai               (Middleware, mapResponseHeaders,
 import Network.Wai.Handler.Warp  (warpVersion)
 
 middleware :: Middleware
-middleware = modifyResponse (mapResponseHeaders (serverHeader :))
+middleware = modifyResponse $ mapResponseHeaders (serverHeader :)
 
 serverHeader :: Header
 serverHeader = (hServer, S8.pack serverName)

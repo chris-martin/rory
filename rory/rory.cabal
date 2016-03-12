@@ -8,12 +8,12 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Rory.Core
-                     , Rory.Ctl
+  exposed-modules:     Rory.App
+                     , Rory.Args
+                     , Rory.Config
                      , Rory.Server
-                     , Rory.Server.Args
-                     , Rory.Server.Config
                      , Rory.Server.Name
+                     , Rory.Version
                      , Paths_rory
   build-depends:       base >= 4.7 && < 5
                      , blaze-builder

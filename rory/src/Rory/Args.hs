@@ -1,4 +1,4 @@
-module Rory.Server.Args
+module Rory.Args
      ( Args (..)
      , parser
      , parserInfo
