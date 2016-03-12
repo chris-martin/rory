@@ -1,0 +1,54 @@
+name:                rory
+version:             0.1.0
+homepage:            https://github.com/chris-martin/rory
+author:              Chris Martin
+maintainer:          ch.martin@gmail.com
+build-type:          Simple
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Rory.Core
+                     , Rory.Ctl
+                     , Rory.Server
+                     , Rory.Server.Name
+                     , Paths_rory
+  build-depends:       base >= 4.7 && < 5
+                     , blaze-builder
+                     , bytestring
+                     , directory
+                     , http-types
+                     , resourcet
+                     , wai
+                     , wai-extra
+                     , warp
+  default-language:    Haskell2010
+
+executable rory-server
+  hs-source-dirs:      app
+  main-is:             rory-server.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , rory
+  default-language:    Haskell2010
+
+executable rory-ctl
+  hs-source-dirs:      app
+  main-is:             rory-ctl.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , rory
+  default-language:    Haskell2010
+
+test-suite rory-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base
+                     , rory
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/chris-martin/rory
