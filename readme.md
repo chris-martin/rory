@@ -1,5 +1,7 @@
 Rory is a tool for deploying artifacts to a server.
 
+[![Circle CI](https://circleci.com/gh/chris-martin/rory.svg?style=svg)](https://circleci.com/gh/chris-martin/rory)
+
 ```bash
 # Build and start the server
 (cd rory; stack build; stack exec rory)
