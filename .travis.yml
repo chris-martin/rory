@@ -20,3 +20,4 @@ addons:
     - libgmp-dev
     - libsystemd-dev
     - pkg-config
+    - systemd
