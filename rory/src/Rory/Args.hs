@@ -15,6 +15,7 @@ parserInfo = info (helper <*> parser) fullDesc
 
 data Args = Args
     { configFile :: Maybe FilePath
+    , pidFile    :: Maybe FilePath
     } deriving Show
 
 parser :: Parser Args
@@ -23,3 +24,6 @@ parser = Args
           ( long "config-file"
          <> short 'c'
          <> metavar "CONFIG_FILE" ))
+    <*> (optional $ strOption
+          ( long "pid-file"
+         <> metavar "PID_FILE" ))
