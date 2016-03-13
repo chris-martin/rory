@@ -18,3 +18,4 @@ addons:
   apt:
     packages:
     - libgmp-dev
+    - libsystemd-dev
