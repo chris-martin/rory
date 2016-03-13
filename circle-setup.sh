@@ -6,7 +6,7 @@ tar -xzf stack-1.0.4.2-linux-x86_64.tar.gz
 sudo mv stack-1.0.4.2-linux-x86_64/stack /usr/bin/
 popd
 
-sudo apt-get install -y libgmp-dev libsystemd-journal-dev
+sudo apt-get install -y libgmp-dev libsystemd-dev
 
 stack --no-terminal setup
 stack --no-terminal install hscolour
