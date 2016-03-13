@@ -13,3 +13,8 @@ script:
 - cd rory; stack --no-terminal setup
 - cd rory; stack --no-terminal install hscolour
 - cd rory; stack --no-terminal --skip-ghc-check test
+
+addons:
+  apt:
+    packages:
+    - libgmp-dev
