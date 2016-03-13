@@ -1,14 +1,5 @@
 dependencies:
   cache_directories: ['~/.stack']
-  pre:
-    - wget https://www.stackage.org/stack/linux-x86_64 -O /tmp/stack.gz
-    - gunzip /tmp/stack.gz && chmod +x /tmp/stack
-    - sudo mv /tmp/stack /usr/bin/stack
-    - sudo apt-get install -y libgmp-dev libsystemd-dev
-  override:
-    - stack --no-terminal setup
-    - stack --no-terminal install hscolour
+  override: ['./circle-setup.sh']
 
-test:
-  override:
-    - stack test
+test: {override: ['stack test']}
