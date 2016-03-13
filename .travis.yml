@@ -19,3 +19,4 @@ addons:
     packages:
     - libgmp-dev
     - libsystemd-dev
+    - pkg-config
