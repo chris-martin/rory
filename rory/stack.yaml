@@ -1,3 +1,3 @@
 resolver: lts-5.2
 packages: ['.']
-nix: {packages: [systemd, pkgconfig, zlib]}
+nix: {enable: false, packages: [systemd, pkgconfig, zlib]}
