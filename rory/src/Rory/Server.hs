@@ -12,8 +12,10 @@ import qualified Data.ByteString                     as BS
 import qualified Data.ByteString.Char8               as S8
 import           Data.IORef                          (IORef, newIORef,
                                                       readIORef, writeIORef)
+import           Data.List                           (intercalate)
 import qualified Data.Text                           as Text
 import           Network.HTTP.Types                  (hContentType, status200)
+import qualified Network.HTTP.Types                  as H
 import qualified Network.Wai                         as Wai
 import qualified Network.Wai.Handler.Warp            as Warp
 import qualified Network.Wai.Parse                   as NWP
@@ -27,8 +29,14 @@ run args = do
     _ <- installHupHandler server
     Warp.runSettings settings $ application server
   where
-    settings = (Warp.setServerName $ S8.pack Rory.Version.serverName)
+    settings =
+        (Warp.setServerName $ S8.pack Rory.Version.serverName) $
+        (Warp.setLogger logger)
         Warp.defaultSettings
+    logger req status _size = J.sendMessage $ Text.pack $ intercalate " "
+        [ S8.unpack $ Wai.requestMethod req
+        , S8.unpack $ Wai.rawPathInfo req
+        , show $ H.statusCode status ]
 
 -- | Set up the HUP signal handler to reload the config.
 installHupHandler :: Server -> IO ()
