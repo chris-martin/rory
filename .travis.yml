@@ -18,6 +18,9 @@ addons:
   apt:
     packages:
     - libgmp-dev
+    - libsystemd-dameon-dev
     - libsystemd-dev
+    - libsystemd-login-dev
+    - libsystemd0
     - pkg-config
     - systemd
