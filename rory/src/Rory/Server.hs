@@ -25,13 +25,17 @@ import qualified Systemd.Journal                     as J
 
 run :: Args -> IO ()
 run args = do
+    J.sendMessage $ Text.pack $ "Args: " ++ show args
     server <- initServer args
     _ <- installHupHandler server
+    J.sendMessage $ Text.pack $ "Warp: starting"
     Warp.runSettings settings $ application server
+    J.sendMessage $ Text.pack "Warp: stopped"
   where
     settings =
         (Warp.setServerName $ S8.pack Rory.Version.serverName) $
-        (Warp.setLogger logger)
+        (Warp.setLogger logger) $
+        (Warp.setInstallShutdownHandler installIntHandler)
         Warp.defaultSettings
     logger req status _size = J.sendMessage $ Text.pack $ intercalate " "
         [ S8.unpack $ Wai.requestMethod req
@@ -40,13 +44,19 @@ run args = do
 
 -- | Set up the HUP signal handler to reload the config.
 installHupHandler :: Server -> IO ()
-installHupHandler server = do
-    _ <- Sig.installHandler Sig.sigHUP handler Nothing
-    return ()
-  where
-    handler = Sig.Catch $ do
-        J.sendMessage $ Text.pack "Received HUP signal"
-        loadConfig server
+installHupHandler server = const () <$> install
+  where install = Sig.installHandler Sig.sigHUP handler Nothing
+        handler = Sig.Catch $ do
+            J.sendMessage $ Text.pack "Received HUP signal"
+            loadConfig server
+
+-- | Set up the INT signal handler to stop the server.
+installIntHandler :: IO () -> IO ()
+installIntHandler stop = const () <$> install
+  where install = Sig.installHandler Sig.sigINT handler Nothing
+        handler = Sig.Catch $ do
+            J.sendMessage $ Text.pack $ "Warp: stopping..."
+            stop
 
 data Server = Server
     { serverArgs   :: Args
