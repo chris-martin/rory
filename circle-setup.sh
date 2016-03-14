@@ -6,7 +6,8 @@ export NIX_PATH=$HOME/.nix-defexpr/channels
 
 mkdir -p ~/nix-store
 sudo mkdir -p /nix
-sudo ln -s ~/nix-store /nix/store
+sudo chown ubuntu /nix
+ln -s ~/nix-store /nix/store
 
 curl https://nixos.org/nix/install | sh
 
