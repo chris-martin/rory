@@ -2,5 +2,4 @@ dependencies:
   cache_directories: ['~/.stack', '~/rory/.stack-work']
   override: ['./circle-setup.sh']
 
-test: {override: ['~/.nix-profile/bin/stack --nix --no-terminal build',
-                  '~/.nix-profile/bin/stack --nix --no-terminal test']}
+test: {override: ['./circle-build.sh', './circle-test.sh']}
