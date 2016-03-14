@@ -11,4 +11,3 @@ test:
   override:
     - ./circle-build.sh
     - ./circle-test.sh
-    - mv /nix/store ~/nix-store
