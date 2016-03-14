@@ -6,8 +6,8 @@ dependencies:
     - ~/rory/rory/.stack-work
   override:
     - ./circle-setup.sh
+    - ./circle-build.sh
 
 test:
   override:
-    - ./circle-build.sh
     - ./circle-test.sh
