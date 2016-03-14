@@ -9,7 +9,7 @@ mkdir -p ~/nix-store
 
 curl https://nixos.org/nix/install | sh
 
-nix-env -i haskellPackages.stack
+nix-env -i stack
 
 stack --nix --no-terminal setup
 stack --nix --no-terminal install hscolour
