@@ -2,4 +2,5 @@ dependencies:
   cache_directories: ['~/nix-store', '~/.stack', '~/rory/.stack-work']
   override: ['./circle-setup.sh']
 
-test: {override: ['./circle-build.sh', './circle-test.sh']}
+test: {override: ['./circle-build.sh', './circle-test.sh',
+                  'mv /nix/store nix-store']}

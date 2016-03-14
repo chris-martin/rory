@@ -4,10 +4,10 @@ export PATH=$HOME/.nix-profile/bin:$PATH
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 export NIX_PATH=$HOME/.nix-defexpr/channels
 
-mkdir -p ~/nix-store
+mkdir -p nix-store
 sudo mkdir -p /nix
 sudo chown ubuntu /nix
-ln -s ~/nix-store /nix/store
+mv nix-store /nix/store
 
 curl https://nixos.org/nix/install | sh
 
