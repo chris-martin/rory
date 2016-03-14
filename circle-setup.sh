@@ -6,12 +6,12 @@ export NIX_PATH=$HOME/.nix-defexpr/channels
 
 # Create a nix-store dir in the home directory in case it isn't already
 # populated by the Circle cache.
-mkdir -p nix-store
+mkdir -p ~/nix-store
 
 # Move the cached Nix store to its real location, /nix/store
 sudo mkdir -p /nix
 sudo chown ubuntu /nix
-mv nix-store /nix/store
+mv ~/nix-store /nix/store
 
 # Install Nix
 curl https://nixos.org/nix/install | sh
