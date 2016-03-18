@@ -8,7 +8,7 @@ module Rory.Args
      ) where
 
 import Data.Maybe               (fromMaybe)
-import Data.String              (IsString(..))
+import Data.String              (fromString)
 import Network.Wai.Handler.Warp (Port, HostPreference)
 import Options.Applicative
 
@@ -37,9 +37,6 @@ commandReader = str >>= \s -> case s of
     "reload"  -> pure Reload
     _         -> readerError $ "Invalid command: '" ++ s ++ "'"
 
-isStringReader :: IsString a => ReadM a
-isStringReader = fromString <$> str
-
 parser :: Parser Args
 parser = Args
     <$> (optional $ option str
@@ -50,7 +47,7 @@ parser = Args
           ( long "bind-port"
          <> metavar "BIND_PORT"
          <> help ("Default: " ++ show defaultBindPort)))
-    <*> (optional $ option isStringReader
+    <*> (optional $ option (fromString <$> str)
           ( long "bind-host"
          <> metavar "BIND_HOST"))
     <*> (optional $ option str
