@@ -3,8 +3,11 @@ module Rory.Args
      , parser
      , parserInfo
      , get
+     , bindPortOrDefault
      ) where
 
+import Data.Maybe               (fromMaybe)
+import Network.Wai.Handler.Warp (Port)
 import Options.Applicative
 
 get :: IO Args
@@ -15,7 +18,7 @@ parserInfo = info (helper <*> parser) fullDesc
 
 data Args = Args
     { configFile :: Maybe FilePath
-    , bindPort   :: Maybe Int
+    , bindPort   :: Maybe Port
     , bindHost   :: Maybe String
     , pidFile    :: Maybe FilePath
     , dryRun     :: Bool
@@ -40,7 +43,8 @@ parser = Args
          <> metavar "CONFIG_FILE"))
     <*> (optional $ option auto
           ( long "bind-port"
-         <> metavar "BIND_PORT"))
+         <> metavar "BIND_PORT"
+         <> help ("Default: " ++ show defaultBindPort)))
     <*> (optional $ strOption
           ( long "bind-host"
          <> metavar "BIND_HOST"))
@@ -50,3 +54,9 @@ parser = Args
     <*> (switch $ long "dry-run")
     <*> (optional $ argument commandOption
           (metavar "COMMAND"))
+
+defaultBindPort :: Port
+defaultBindPort = 58594
+
+bindPortOrDefault :: Args -> Port
+bindPortOrDefault = fromMaybe defaultBindPort . bindPort

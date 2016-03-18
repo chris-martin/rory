@@ -1,6 +1,7 @@
 module Rory.Server (run) where
 
 import           Rory.Args    (Args)
+import qualified Rory.Args    as Args
 import           Rory.Config  (Config)
 import qualified Rory.Config  as Config
 import qualified Rory.Version
@@ -33,6 +34,7 @@ run args = do
     J.sendMessage $ Text.pack "Warp: stopped"
   where
     settings =
+        (Warp.setPort $ Args.bindPortOrDefault args) $
         (Warp.setServerName $ S8.pack Rory.Version.serverName) $
         (Warp.setLogger logger) $
         (Warp.setInstallShutdownHandler installIntHandler)
