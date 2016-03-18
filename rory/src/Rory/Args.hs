@@ -18,6 +18,7 @@ data Args = Args
     , bindPort   :: Maybe Int
     , bindHost   :: Maybe String
     , pidFile    :: Maybe FilePath
+    , dryRun     :: Bool
     , command    :: Maybe Command
     } deriving Show
 
@@ -46,5 +47,6 @@ parser = Args
     <*> (optional $ strOption
           ( long "pid-file"
          <> metavar "PID_FILE"))
+    <*> (switch $ long "dry-run")
     <*> (optional $ argument commandOption
           (metavar "COMMAND"))
