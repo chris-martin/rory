@@ -34,6 +34,7 @@ run args = do
     J.sendMessage $ Text.pack "Warp: stopped"
   where
     settings =
+        (Warp.setHost $ Args.bindHostOrDefault args) $
         (Warp.setPort $ Args.bindPortOrDefault args) $
         (Warp.setServerName $ S8.pack Rory.Version.serverName) $
         (Warp.setLogger logger) $

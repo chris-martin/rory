@@ -3,11 +3,13 @@ module Rory.Args
      , parser
      , parserInfo
      , get
+     , bindHostOrDefault
      , bindPortOrDefault
      ) where
 
 import Data.Maybe               (fromMaybe)
-import Network.Wai.Handler.Warp (Port)
+import Data.String              (IsString(..))
+import Network.Wai.Handler.Warp (Port, HostPreference)
 import Options.Applicative
 
 get :: IO Args
@@ -19,7 +21,7 @@ parserInfo = info (helper <*> parser) fullDesc
 data Args = Args
     { configFile :: Maybe FilePath
     , bindPort   :: Maybe Port
-    , bindHost   :: Maybe String
+    , bindHost   :: Maybe HostPreference
     , pidFile    :: Maybe FilePath
     , dryRun     :: Bool
     , command    :: Maybe Command
@@ -27,17 +29,20 @@ data Args = Args
 
 data Command = Start | Stop | Restart | Reload deriving Show
 
-commandOption :: ReadM Command
-commandOption = str >>= \s -> case s of
+commandReader :: ReadM Command
+commandReader = str >>= \s -> case s of
     "start"   -> pure Start
     "stop"    -> pure Stop
     "restart" -> pure Restart
     "reload"  -> pure Reload
     _         -> readerError $ "Invalid command: '" ++ s ++ "'"
 
+isStringReader :: IsString a => ReadM a
+isStringReader = fromString <$> str
+
 parser :: Parser Args
 parser = Args
-    <$> (optional $ strOption
+    <$> (optional $ option str
           ( long "config-file"
          <> short 'c'
          <> metavar "CONFIG_FILE"))
@@ -45,14 +50,14 @@ parser = Args
           ( long "bind-port"
          <> metavar "BIND_PORT"
          <> help ("Default: " ++ show defaultBindPort)))
-    <*> (optional $ strOption
+    <*> (optional $ option isStringReader
           ( long "bind-host"
          <> metavar "BIND_HOST"))
-    <*> (optional $ strOption
+    <*> (optional $ option str
           ( long "pid-file"
          <> metavar "PID_FILE"))
     <*> (switch $ long "dry-run")
-    <*> (optional $ argument commandOption
+    <*> (optional $ argument commandReader
           (metavar "COMMAND"))
 
 defaultBindPort :: Port
@@ -60,3 +65,9 @@ defaultBindPort = 58594
 
 bindPortOrDefault :: Args -> Port
 bindPortOrDefault = fromMaybe defaultBindPort . bindPort
+
+defaultHost :: HostPreference
+defaultHost = fromString "*"
+
+bindHostOrDefault :: Args -> HostPreference
+bindHostOrDefault = fromMaybe defaultHost . bindHost
