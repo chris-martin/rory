@@ -11,6 +11,7 @@ library
   exposed-modules:     Rory.App
                      , Rory.Args
                      , Rory.Config
+                     , Rory.DryRun
                      , Rory.Server
                      , Rory.Version
                      , Paths_rory

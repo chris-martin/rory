@@ -1,9 +1,11 @@
 module Rory.App (main) where
 
-import qualified Rory.Server
-import qualified Rory.Args
+import qualified Rory.Args   as Args
+import qualified Rory.DryRun as DryRun
+import qualified Rory.Server as Server
 
 main :: IO ()
-main = do args <- Rory.Args.get
-          Rory.Server.run args
-          return ()
+main = do args <- Args.get
+          if Args.dryRun args
+          then DryRun.dryRun args
+          else Server.run args
