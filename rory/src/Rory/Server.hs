@@ -34,21 +34,24 @@ run args = do
     J.sendMessage $ Text.pack $ "Args: " ++ show args
     server <- initServer args
     _ <- installHupHandler server
-    J.sendMessage $ Text.pack $ "Warp: starting"
-    Warp.runSettings settings $ application server
+    J.sendMessage $ Text.pack "Warp: starting"
+    Warp.runSettings (warpSettings args) (application server)
     J.sendMessage $ Text.pack "Warp: stopped"
-  where
-    settings =
-        (Warp.setHost $ Args.bindHostOrDefault args) $
-        (Warp.setPort $ Args.bindPortOrDefault args) $
-        (Warp.setServerName $ S8.pack Rory.Version.serverName) $
-        (Warp.setLogger logger) $
-        (Warp.setInstallShutdownHandler installIntHandler)
-        Warp.defaultSettings
-    logger req status _size = J.sendMessage $ Text.pack $ intercalate " "
-        [ S8.unpack $ Wai.requestMethod req
-        , S8.unpack $ Wai.rawPathInfo req
-        , show $ H.statusCode status ]
+
+warpSettings :: Args -> Warp.Settings
+warpSettings args =
+    (Warp.setHost $ Args.bindHostOrDefault args) $
+    (Warp.setPort $ Args.bindPortOrDefault args) $
+    (Warp.setServerName $ S8.pack Rory.Version.serverName) $
+    (Warp.setLogger warpLogger) $
+    (Warp.setInstallShutdownHandler installIntHandler)
+    Warp.defaultSettings
+
+warpLogger :: Wai.Request -> H.Status -> Maybe Integer -> IO ()
+warpLogger req status _size = J.sendMessage $ Text.pack $ intercalate " "
+    [ S8.unpack $ Wai.requestMethod req
+    , S8.unpack $ Wai.rawPathInfo req
+    , show $ H.statusCode status ]
 
 -- | Set up the HUP signal handler to reload the config.
 installHupHandler :: Server -> IO ()
