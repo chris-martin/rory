@@ -1,6 +1,6 @@
 Rory is a tool for deploying artifacts to a server.
 
-[![Circle CI](https://circleci.com/gh/chris-martin/rory.svg?style=svg)](https://circleci.com/gh/chris-martin/rory)
+![](https://travis-ci.org/chris-martin/rory.svg)
 
 ```bash
 # Build and start the server

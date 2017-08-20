@@ -8,6 +8,7 @@ module Rory.Args
      ) where
 
 import Data.Maybe               (fromMaybe)
+import Data.Semigroup           (Semigroup (..))
 import Data.String              (fromString)
 import Network.Wai.Handler.Warp (Port, HostPreference)
 import Options.Applicative
